@@ -2,7 +2,7 @@
 jQuery(function ($) {
 	'use strict';
 
-	Handlebars.registerHelper('eq', function(a, b, options) {
+	Handlebars.registerHelper('eq', function (a, b, options) {
 		return a === b ? options.fn(this) : options.inverse(this);
 	});
 
@@ -106,6 +106,16 @@ jQuery(function ($) {
 			this.render();
 		},
 		getActiveTodos: function () {
+			$.ajaxSetup({
+				headers: {
+					Authorization:
+						'token 7a806e558ca3e75a305223c5c4a06d1032c825a0'
+				}
+			});
+
+		    $.getJSON('https://api.github.com/issues', function (data) {
+		        console.log(data);
+		    });
 			return this.todos.filter(function (todo) {
 				return !todo.completed;
 			});
