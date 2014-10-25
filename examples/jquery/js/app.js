@@ -106,17 +106,7 @@ jQuery(function ($) {
 			this.render();
 		},
 		getActiveTodos: function () {
-			$.ajaxSetup({
-				headers: {
-					Authorization:
-						'token 7a806e558ca3e75a305223c5c4a06d1032c825a0'
-				}
-			});
-
-		    $.getJSON('https://api.github.com/issues', function (data) {
-		        console.log(data);
-		    });
-			return this.todos.filter(function (todo) {
+      return this.todos.filter(function (todo) {
 				return !todo.completed;
 			});
 		},
@@ -126,6 +116,24 @@ jQuery(function ($) {
 			});
 		},
 		getFilteredTodos: function () {
+      $.ajaxSetup({
+        headers: {
+          Authorization:
+            'token 7a806e558ca3e75a305223c5c4a06d1032c825a0'
+        }
+      });
+      var that = this;
+
+      $.getJSON('https://api.github.com/issues', function (data) {
+        $.each(data, function (i, issue){
+          that.todos.push({
+            id: issue.id,
+            title: issue.title,
+            completed: (issue.state == 'open' ? false : true)
+          });
+        });
+      });
+
 			if (this.filter === 'active') {
 				return this.getActiveTodos();
 			}
